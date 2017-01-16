@@ -1,15 +1,17 @@
 // Basic API request
 const queryViki = (str, callback) => {
   console.log('Searching:', str);
-  $.ajax({
-    method: 'GET',
-    url: 'https://api.viki.io/v4/search.json',
-    data: { c: str, per_page: 5, with_people: true, app: '100266a', t: Date.now() },
-  })
-  .done((data) => {
-    console.log(data);
-    callback(data);
-  });
+  if(str.length > 0){
+    $.ajax({
+      method: 'GET',
+      url: 'https://api.viki.io/v4/search.json',
+      data: { c: str, per_page: 5, with_people: true, app: '100266a', t: Date.now() },
+    })
+    .done((data) => {
+      console.log(data);
+      callback(data);
+    });
+  }
 };
 
 // Custom no throttle function to avoid throttling API requests
@@ -27,15 +29,22 @@ const noThrottle = (func) => {
   };
 };
 
-const tqueryViki = noThrottle(queryViki);
 const insertOptions = (data) => {
-
+  // $('#list').html();
+  data.forEach((obj) => {
+    $('#list').append('<option>'+ obj.tt + '</option>');
+  });
 };
 
+const tqueryViki = noThrottle(queryViki);
 $(document).ready(() => {
   console.log('DOM ready!');
-  $('#input').on('input', function() {
-    tqueryViki($(this).val(), insertOptions);
+  $('#input').on('keyup', function(e) {
+    if(e.keyCode >= 48 && e.keyCode <= 57 ||
+       e.keyCode >= 65 && e.keyCode <= 90 ||
+       e.keyCode === 8) {
+      tqueryViki($(this).val(), insertOptions);
+    }
   });
 });
 
