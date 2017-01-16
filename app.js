@@ -1,6 +1,6 @@
 // Basic API request
 const queryViki = (str, callback) => {
-  console.log('Searching:', str);
+  // console.log('Searching:', str);
   if(str.length > 0){
     $.ajax({
       method: 'GET',
@@ -8,7 +8,7 @@ const queryViki = (str, callback) => {
       data: { c: str, per_page: 5, with_people: true, app: '100266a', t: Date.now() },
     })
     .done((data) => {
-      console.log(data);
+      // console.log('Got data:', data);
       callback(data);
     });
   }
@@ -30,7 +30,7 @@ const noThrottle = (func) => {
 };
 
 const insertOptions = (data) => {
-  // $('#list').html();
+  // $('#list').empty();
   data.forEach((obj) => {
     $('#list').append('<option>'+ obj.tt + '</option>');
   });
@@ -38,7 +38,7 @@ const insertOptions = (data) => {
 
 const tqueryViki = noThrottle(queryViki);
 $(document).ready(() => {
-  console.log('DOM ready!');
+  // console.log('DOM ready!');
   $('#input').on('keyup', function(e) {
     if(e.keyCode >= 48 && e.keyCode <= 57 ||
        e.keyCode >= 65 && e.keyCode <= 90 ||
